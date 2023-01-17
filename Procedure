@@ -1,0 +1,26 @@
+Step 1: Download & Install Virtual box and extension pack as well.
+Step 2: Download Windows 2019 Server(ISO image) on your machine(64-bit)
+Step 3: Configure it in virtual box with apprpriate allocation for RAM and storage space. 
+Step 4: Go to settings on virtualbox for windows server, navigate to network. Click on Adapter 2, Enable Network Adapter. Select Internal Network from the dropdown menu. 
+Step5: Run the Windows Server 2019 on virtual box.
+Step 6: As you run into installation mode, select Windows Server 2019 Standard Evaluation(Desktop Experience), and continue with the installation.
+Step 7: Create a password for admin after installation. Also for the naming convention change the name of the PC to Domain Controller.
+Step 8: After logging into the server 2019, click on devices on the virtualbox menu and select Insert Guest Additions CD image. Open the file explorer on server 2019, where you can see image VirtualBox Guest Additions. After selecting it, navigate to VBoxWindowsAdditions-amd64, which installs all the necessary files. And Reboot the server 2019.
+Step 9: Login to server 2019, goto Network Connection under Control Panel. Check for the ethernet connected to Internet (to identify check IPv4 Address, should contain 10.0..) rename it to Internet and other ethernet to internal network(to identify check IPv4 Address, should contain 169.254..). Goto the properties to internal network, select IPv4 -> 1. Use the following IP address: 172.16.0.1   2. Subnet Mask: 255.255.255.0  3. Use the following DNS (preferred): 127.0.0.1 and click OK.
+Step 10: Goto Server Manager, Add Roles and Features. Click on next, next and click on Active Directory Domain Services and continue to install.
+Step 11 : On Server Manager Dashbord, click on notification and select Promote this server to domain controller. Add new forest, enter root domain(ex: testdomain.com) click next and setup password and click on next(couple of times) and install. Reboot.
+Step 12: Creation of domain admin account, go to search bar and look for Active Directory Users and Computers. Right Click on testdomain.com -> new-> organizational unit, name it Admin(uncheck protect container from accidental deletion).
+Step 13: Right click on Admin -> new -> user, now fill out the details(name and username) -> set password.
+Step 14: Under Admins, right click on the user you have created and select properties. Go to Member Of-> Add -> type domain admins ->Check Admins(resolves) -> Press Ok ->Apply -> Ok. With this task, we have domain admin account.
+Step 15: Login domain admin account, navigate to server manger -> Add Roles and Featues ->Next->Next-> Remote Access(check the box)-> Next->  Routing and RAS(check the box) -> install.
+Step 16: On Server Manager, click on tools -> Routing and remote access-> DC local(right click) and enable routing and remote access-> NAT(check)-> choose Internet(IP 10.0....) ->   Finish.
+Step 17: Navigate to server manger -> Add Roles and Featues ->Next->Next-> DHCP server(check the box)-> Next -> install.
+Step 18: On Server Manager, click on tools -> DHCP-> expand the domain name-> IPv4(right click) -> new scope ->enter the name(Tester123) -> start Ip 172.16.0.100 & end IP 172.16.0.200 and set Length = 24 -> lease duration upto you -> Yes -> IP address : 172.16.0.1 and click ADD and proceed next -> Add parent domain name(ex: testdomain.com) -> next and finish.
+Step 19: In DHCP window, right click on domain name-> Authorize ->refresh.
+Step 20. On Server Manger, Select Configure this local server-> Disable 'IE enhanced Security Configuration'.
+Step 21: Download source code for creating users -> Open the folder and add your name in the names.txt and save the file.
+Step 22: Open PowerShell ISE(run as admin), open the script ' Create User' in PowerShell -> in command line of PowerShell type, Set-ExecutionPolicy Unrestricted and enter ->Yes to All. To run the script, make sure the command line path in PowerShell is same as that file residing in the folder.
+Step 23: Go to virtualbox, New VM -> name=Client -> Windows 10 Pro. Navigate to settings of this Vm -> Network -> Select 'Internal Network'
+Step 24: After logging into Client, check for the internet connectivity.
+Step 25: Right click on windows button -> System -> Rename this PC(advanced) -> Change the name, Select Member of and ADD IN DOMAIN NAME and click ok.
+Step 26: You can try logging in with other users into the client/Windows 10 pro.
